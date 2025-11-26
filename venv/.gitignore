@@ -1,24 +1,2 @@
-# Django
-*.log
-*.pot
-*.pyc
-__pycache__/
-db.sqlite3
-media/
-
-# Virtual Environment
-venv/
-.env
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Database
-*.db
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*
