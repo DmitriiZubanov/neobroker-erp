@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Упрощенные стили для лучшей совместимости с xhtml2pdf */
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+        }
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .document-title {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .section-title {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #000;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        .info-table td {
+            padding: 8px;
+            vertical-align: top;
+            border-bottom: 1px solid #eee;
+        }
+        .label {
+            font-weight: bold;
+            width: 180px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+            font-size: 10px;
+            text-align: center;
+            color: #666;
+        }
+        .signature-area {
+            margin-top: 60px;
+            display: block;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 250px;
+            margin-top: 30px;
+            padding-top: 5px;
+            text-align: center;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-name">ООО "НеоБрокер"</div>
+        <div class="document-title">ЗАЯВКА НА ПЕРЕВОЗКУ</div>
+        <div>№ {% if request.request_number %}{{ request.request_number }}{% else %}—{% endif %} от {{ request.request_date|date:"d.m.Y" }}</div>
+    </div>
+
+    <!-- Информация о клиенте -->
+    <div class="section">
+        <div class="section-title">1. КЛИЕНТ</div>
+        <table class="info-table">
+            <tr><td class="label">Название:</td><td>{{ request.client.name }}</td></tr>
+            <tr><td class="label">ИНН:</td><td>{{ request.client.inn|default:"—" }}</td></tr>
+            <tr><td class="label">Телефон:</td><td>{{ request.client.company_phone|default:"—" }}</td></tr>
+            <tr><td class="label">Контактное лицо:</td><td>{{ request.client.contact_person1|default:"—" }}</td></tr>
+        </table>
+    </div>
+
+    <!-- Данные о перевозке -->
+    <div class="section">
+        <div class="section-title">2. ДАННЫЕ О ПЕРЕВОЗКЕ</div>
+        <table class="info-table">
+            <tr><td class="label">Грузоотправитель:</td><td>{{ request.consignor }}</td></tr>
+            <tr><td class="label">Вид транспорта:</td><td>{{ request.get_transport_type_display }}</td></tr>
+            <tr><td class="label">Вес брутто:</td><td>{% if request.gross_weight %}{{ request.gross_weight }} кг{% else %}—{% endif %}</td></tr>
+            <tr><td class="label">Объем:</td><td>{% if request.volume %}{{ request.volume }} м³{% else %}—{% endif %}</td></tr>
+        </table>
+    </div>
+
+    <!-- Финансовые данные -->
+    <div class="section">
+        <div class="section-title">3. ФИНАНСОВЫЕ ДАННЫЕ</div>
+        <table class="info-table">
+            <tr><td class="label">Объявленная стоимость:</td><td>{% if request.declared_value %}{{ request.declared_value }} {{ request.get_currency_display }}{% else %}—{% endif %}</td></tr>
+            <tr><td class="label">Страхование:</td><td>{% if request.insurance_required %}Да{% else %}Нет{% endif %}</td></tr>
+        </table>
+    </div>
+
+    <!-- Подписи -->
+    <div class="signature-area">
+        <div style="display: inline-block; width: 45%;">
+            <div class="signature-line">Отправитель</div>
+        </div>
+        <div style="display: inline-block; width: 45%; margin-left: 8%;">
+            <div class="signature-line">Менеджер: {{ request.manager|default:"________________" }}</div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <div class="footer">
+        Документ сгенерирован {{ current_time|date:"d.m.Y H:i" }} | Система Neobroker ERP
+    </div>
+</body>
+</html>

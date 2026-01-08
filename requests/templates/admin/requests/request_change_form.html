@@ -1,0 +1,11 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{{ pdf_url }}" target="_blank" style="background:#4CAF50;color:white;">
+            📄 Сгенерировать PDF
+        </a>
+    </li>
+{% endblock %}
